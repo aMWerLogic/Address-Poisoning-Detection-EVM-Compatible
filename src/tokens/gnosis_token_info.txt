@@ -1,0 +1,14 @@
+address,name,symbol,decimals
+0x4d18815d14fe5c3304e87b3fa18318baa5c23820,Safe Token from Mainnet,SAFE,18
+0xddafbb505ad214d7b80b1f830fccc89b60fb7a83,USDC on xDai,USDC,6
+0x8e5bbbb09ed1ebde8674cda39a0c169401db4252,Wrapped BTC on xDai,WBTC,8
+0x4ecaba5870353805a9f068101a40e0f32ed605c6,Tether USD on xDai,USDT,6
+0x4ecaba5870353805a9f068101a40e0f32ed605c6,Tether USD on xDai,USD₮0,6
+0x7f7440c5098462f833e123b44b8a03e1d9785bab,1INCH Token on xDai,1INCH,18
+0x6c76971f98945ae98dd7d4dfca8711ebea946ea6,Wrapped liquid staked Ether 2.0 from Mainnet,wstETH,18
+0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1,Wrapped Ether on xDai,WETH,18
+0x4537e328bf7e4efa29d05caea260d7fe26af9d74,Uniswap on xDai,UNI,18
+0x9c58bacc331c9aa871afd802db6379a98e80cedb,Gnosis Token on xDai,GNO,18
+0x2a22f9c3b484c3629090feed35f17ff8f88f76f0,Bridged USDC (Gnosis),USDC.e,6
+0xe2e73a1c69ecf83f464efce6a5be353a37ca09b2,ChainLink Token on xDai,LINK,18
+0xc90132d5d1b87730da162ec9cd34885828769cc3,Tether USD on xDai,USDT,18
