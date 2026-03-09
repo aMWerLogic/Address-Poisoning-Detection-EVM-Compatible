@@ -6,7 +6,6 @@ import sys
 import re
 from dotenv import load_dotenv
 
-#TODO: add individual begin date for each rollup (based on launch date)
 if len(sys.argv) != 2:
     print("wrong arguments")
     exit(1)

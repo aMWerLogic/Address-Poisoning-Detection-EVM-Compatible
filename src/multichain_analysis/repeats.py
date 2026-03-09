@@ -1,17 +1,15 @@
 import os
 import polars as pl
 from pathlib import Path
-from poisoning_detector.steps_runner import StepsRunner
 from collections import Counter, defaultdict
 
 reverse_arr = [False,True]
-chains = ["opbnb", "polygonzk", "arbitrum", "optimism", "avalanche", "gnosis"] #TODO: check if those are compatible between each other
+chains = ["opbnb", "polygonzk", "arbitrum", "optimism", "avalanche", "gnosis"]
 attack_types = ["zero", "fake"]
 BASE_DIR = Path(__file__).resolve().parent  
 PROJECT_ROOT = BASE_DIR.parent
 
 def analyse_reused_attackers():
-    reused_attackers = {}
     attackers_counter = Counter()
     attacker_chains = defaultdict(set)
     for chain in chains:

@@ -145,7 +145,7 @@ if __name__ == "__main__":
         )
     )
 
-    start_date = datetime(2022, 1, 1, 0, 0, 0)   #we started at 2022, 1, 1, 0, 0, 0   #optimism before ultra optimisation 2025, 6, 15, 20, 30, 0  #2023, 7, 2, 0, 0, 0 gnosis dust stop       #(2024, 11, 1, 10, 30, 0) <- optimism last date before gc and find_prev_tr redesign  #2025, 5, 21, 0, 15, 0 <- przed filtrowaniem interactions in find previous transfers
+    start_date = datetime(2022, 1, 1, 0, 0, 0)  
     end_date = datetime(2025, 7, 1, 0, 0, 0)
     
     logs = logs.filter(

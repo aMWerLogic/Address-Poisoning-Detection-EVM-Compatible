@@ -3,7 +3,6 @@ from pathlib import Path
 pl.Config.set_fmt_str_lengths(100)
 pl.Config.set_tbl_rows(5)
 pl.Config.set_tbl_cols(12)
-import sys
 
 def to_parquet(tsv_file: Path, name):
 
@@ -62,7 +61,6 @@ def to_parquet(tsv_file: Path, name):
         pl.col(col8_name).str.replace(contract_column, "", literal=False)
     )
 
-    # Rename columns
     df = df.rename({
         df.columns[0]: "blockNumber",
         df.columns[1]: "transactionHash",

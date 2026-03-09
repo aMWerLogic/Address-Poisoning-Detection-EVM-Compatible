@@ -426,7 +426,7 @@ class StepsRunner:
             strategy="backward"
         )
 
-        result = result.filter(pl.col("time_prev").is_null()).select(["transactionHash","id","attacker_l"]) #te które nie dostały w batchu
+        result = result.filter(pl.col("time_prev").is_null()).select(["transactionHash","id","attacker_l"])
         
         for row in result.iter_rows(named=True):
             key = (row["transactionHash"], row["id"])

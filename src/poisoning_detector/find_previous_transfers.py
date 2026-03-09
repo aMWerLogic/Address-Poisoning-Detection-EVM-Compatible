@@ -113,22 +113,6 @@ def find_previous_victim_interactors_ram_lower(attack_df, path_data,current_time
     )
     
     result = pl.concat([result_batch, result_10]).collect(engine="streaming")
-    print("after concat:", result.estimated_size("gb"))
-    #print(result)
-
-    #result = (
-    #    result
-    #    .group_by(victim_col)
-    #    .agg([
-    #        pl.col(attacker_col).explode().alias(attacker_col),
-    #        pl.col("time").explode().alias("time"),
-    #        pl.col("transactionHash").explode().alias("transactionHash"), 
-    #    ])
-    #)
-    #print("after explode:", result.estimated_size("gb"))
-    #for x in result["time"][0]:
-    #    print(x)
-    #print(result)
     return result
 
 

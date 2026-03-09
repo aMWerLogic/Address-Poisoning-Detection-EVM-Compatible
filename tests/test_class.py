@@ -56,8 +56,6 @@ class TestClass:
         assert attack_df is not None
         good_result = good_result.filter(~pl.col("transactionHash")
                                             .is_in(["attacker_knows_victim_attack_in_batch"]))
-        #print(good_result) 
-        #print(attack_df)
         assert attack_df.equals(good_result)
 
 
@@ -107,10 +105,6 @@ class TestClass:
             scan_parquet_fn=lambda _: eleven_logs_dataframe.lazy(),
             number_of_inter=2
             )
-        #max_len = logs_result.select(
-        #    pl.col("time").list.len().max()
-        #).item()
-        #print("max_len:",max_len)
         assert logs_result.height==12
         seconds = 25
         logs_result = logs_result.sort("time", descending=True)

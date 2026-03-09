@@ -71,7 +71,6 @@ def analyse_frequency_of_tokens(output_path: str, attack_type: str = "fake"):
     for chain in chains:
         for reversed in reverse_arr:
             path = PROJECT_ROOT / f"results_{chain}" / f"{chain}_{attack_type}_results_filtered_{reversed}.csv"
-            #path = PROJECT_ROOT / "src" / "results" / f"{chain}_fake_step1_{reversed}.csv"
             if not path.exists():
                 print(f"File not found: {path}")
                 continue

@@ -39,21 +39,14 @@ def filter_payouts(name):
             (pl.col("possible_utility_victim") == "False") &
             (pl.col("possible_utility_attacker") == "False") 
         )
-        print(df.height)
-        ###key_set = set(df["transaction_key"].unique().to_list())
         df_keys = df.select("transaction_key").unique()
         path3 = f"results_{name}/{name}_payouts_{reversed}.csv"
         df3 = pl.read_csv(path3, infer_schema_length=False)
-        print("height1:",df3.height)
         df3 = df3.join(
             df_keys,
             on="transaction_key",
             how="semi"
         )
-        ###df3 = df3.filter(
-        ###    pl.col("transaction_key").is_in(key_set)
-        ###)
-        print("height2:",df3.height)
         df3.write_csv(f"results_{name}/{name}_payouts_{reversed}_new.csv")
         df3 = df3.with_columns(pl.col("usd_value").cast(pl.Float64))
         cumulative_payouts = (
@@ -154,7 +147,7 @@ def get_payouts(name, path_data, ERC20_decimals_map,ERC20_price_map,ERC20_symbol
         )
         joined.write_csv(f"results/{name}_payouts_{reversed}.csv")
         cumulative_payouts.write_csv(f"results/{name}_cumulative_payouts_{reversed}.csv")
-        return cumulative_payouts, joined #DONE
+        return cumulative_payouts, joined
 
 def filter_steps_by_step1_keys(type: str, name: str, steps: tuple[int, ...] = (2, 3), reversed=False) -> None:
     step1_path = f"results/{name}_{type}_step1_{reversed}.csv"
@@ -173,15 +166,13 @@ def filter_steps_by_step1_keys(type: str, name: str, steps: tuple[int, ...] = (2
                 reader = csv.DictReader(f)
                 fieldnames = reader.fieldnames or []
                 rows = [row for row in reader if row.get("transaction_key") and row["transaction_key"].strip() in step1_keys]
-
-            # Write back in place
             with open(path, "w", newline="", encoding="utf-8") as f_out:
                 writer = csv.DictWriter(f_out, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(rows)
         except FileNotFoundError:
             print(f"missing {path} in filter_steps_by_step1_keys")
-            continue  #DONE
+            continue 
     
 
 def dedupe_csv(path_in: str, path_out: str | None = None):
@@ -197,7 +188,7 @@ def dedupe_csv(path_in: str, path_out: str | None = None):
             print(f"{path_in}: removed {deleted} duplicate rows (from {before} to {after})")
         df_unique.write_csv(path_out)
     except FileNotFoundError:
-        print(f"missing {path_in}") #DONE
+        print(f"missing {path_in}")
 
 def calc_score(x):
     if x == 3:
@@ -239,8 +230,6 @@ def get_interactions(path_data, name, type, reversed):
         pl.col("sender").alias("counterparty")
     ])
     combined = pl.concat([senders, receivers], how="vertical")
-    
-    # Count unique counterparties per address
     interactions = (
         combined
         .group_by("address")
@@ -249,7 +238,7 @@ def get_interactions(path_data, name, type, reversed):
     )
 
     interaction_map = dict(interactions.select("address", "unique_accounts").iter_rows())
-    return interaction_map #DONE
+    return interaction_map 
 
 
 def safe_get_code(w3, address, rpc_url2, retries=float("inf"), delay=30):
@@ -270,7 +259,7 @@ def safe_get_code(w3, address, rpc_url2, retries=float("inf"), delay=30):
             attempt += 1
             print(f"[{attempt}] Unexpected error: {e}. Retrying in {delay}s...")
             time.sleep(delay)
-    raise RuntimeError("Max retries reached, still failing.") #DONE
+    raise RuntimeError("Max retries reached, still failing.")
 
 def write_rows(filepath, rows):
     if rows:
@@ -295,7 +284,6 @@ def to_remove(name, rpc1, rpc2):
             try:
                 with open(f"results_{name}/{name}_{type}_results_filtered_{reversed}.csv", newline="", encoding="utf-8") as f:
                     reader = csv.DictReader(f)
-                    #first_row = next(reader, None)
                     print(f"results_{name}/{name}_{type}_results_filtered_{reversed}.csv")
                     for row in reader:
                         if i%10000==0:
