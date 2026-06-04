@@ -99,29 +99,33 @@ def analyse_count_column_fast(output_path: str, column_name: str):
         f.write(f"1000-10000: {bins[4]}\n")
         f.write(f"10000+: {bins[5]}\n")
 
-
-def obtain_distribution(column_name, with_utility: bool = False):
+# utility_scope: "utility", "non-utility", or "all"
+def obtain_distribution(column_name, utility_scope: str = "non-utility"):
     dfs = []
     bins = [0, 0, 0, 0, 0, 0]
+    normalized_scope = utility_scope.strip().lower()
+    utility_column = f"possible_utility_{column_name}"
+    valid_scopes = {"utility", "all", "non-utility"}
+    if normalized_scope not in valid_scopes:
+        raise ValueError(
+            f"Invalid utility_scope '{utility_scope}'. Expected one of: utility, non-utility, all"
+        )
     for chain in chains:
         for attack_type in attack_types:
             for rev in reverse_arr:
                 path = PROJECT_ROOT / f"results_{chain}" / f"{chain}_{attack_type}_results_filtered_{rev}.csv"
                 if not path.exists():
                     continue
-                if with_utility == False:
-                    df = ( 
-                        pl.read_csv(path, infer_schema_length=False)
-                        .filter(
-                            (pl.col("possible_utility_victim") == "False") &
-                            (pl.col("possible_utility_attacker") == "False")
-                        )
-                    ).with_columns(pl.col(f"unique_accounts_{column_name}").cast(pl.Int64)).filter(pl.col(f"unique_accounts_{column_name}")<=1000)
-                else:
-                    df = ( 
-                        pl.read_csv(path, infer_schema_length=False)
-                        .with_columns(pl.col(f"unique_accounts_{column_name}").cast(pl.Int64)).filter(pl.col(f"unique_accounts_{column_name}")<=1000)
-                    )
+                df = pl.read_csv(path, infer_schema_length=False)
+                if normalized_scope == "utility":
+                    df = df.filter(pl.col(utility_column) == "True")
+                elif normalized_scope == "non-utility":
+                    df = df.filter(pl.col(utility_column) == "False")
+                df = (
+                    df
+                    .with_columns(pl.col(f"unique_accounts_{column_name}").cast(pl.Int64))
+                    .filter(pl.col(f"unique_accounts_{column_name}") <= 1000)
+                )
                 dfs.append(df)
     if not dfs:
         print("No data found.")
@@ -137,8 +141,11 @@ def obtain_distribution(column_name, with_utility: bool = False):
     return distribution
 
 def analyse_combined_plot(column_name="victim"):
-    distribution = obtain_distribution(column_name, False)
-    distribution_utility = obtain_distribution(column_name, True)
+    distribution = obtain_distribution(column_name, "non-utility")
+    distribution_utility = obtain_distribution(column_name, "utility")
+    if distribution is None or distribution_utility is None:
+        print("No data available to plot.")
+        return
     x_red = distribution_utility[f"unique_accounts_{column_name}"].to_list()
     y_red = distribution_utility["count"].to_list()
 
@@ -162,6 +169,44 @@ def analyse_combined_plot(column_name="victim"):
     
     plt.tight_layout()
     plt.show()
+
+
+def analyse_separate_utility_plots():
+    categories = [
+        ("victim", "non-utility", "Non-Utility Victims", "blue"),
+        ("victim", "utility", "Utility Victims", "black"),
+        ("attacker", "non-utility", "Non-Utility Attackers", "blue"),
+        ("attacker", "utility", "Utility Attackers", "black"),
+    ]
+
+    for column_name, scope, title, color in categories:
+        distribution = obtain_distribution(column_name, scope)
+        plt.figure(figsize=(10, 6))
+
+        if distribution is None or distribution.height == 0:
+            plt.title(f"{title} (no data)")
+            plt.text(0.5, 0.5, "No data", ha="center", va="center")
+            plt.xticks([])
+            plt.yticks([])
+            plt.tight_layout()
+            plt.show()
+            continue
+
+        x_vals = distribution[f"unique_accounts_{column_name}"].to_list()
+        y_vals = distribution["count"].to_list()
+
+        plt.bar(x_vals, y_vals, color=color, alpha=0.7, width=1.0)
+        #plt.yscale("log")
+        if len(x_vals) > 0:
+            min_x = min(x_vals)
+            max_x = max(x_vals)
+            plt.xticks(range(min_x, max_x + 5, 50))
+
+        #plt.title(title)
+        plt.xlabel("Unique counterparties")
+        plt.ylabel("Count (log scale)")
+        plt.tight_layout()
+        plt.show()
 
 def count_attackers_and_victims():
     attackers_df  = pl.DataFrame(schema={"attacker": pl.Utf8})

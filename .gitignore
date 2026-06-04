@@ -26,3 +26,12 @@ __pycache__/*
 */__pycache__
 __pycache__
 distribution_similarity_*
+src/*.txt
+src/*.tar.*
+src/multichain_analysis/sensitivity.py
+src/multichain_analysis/sensitivity_birthday.py
+src/multichain_analysis/sensitivity_asset_value.py
+src/multichain_analysis/sensitivity_utility.py
+src/manual_analysis/*.pdf
+Poisoning-Results-Final_old.rar
+manual_analysis_rar

@@ -70,8 +70,8 @@ It is not really a module but rather some loose scripts <br>
 - `extract.py`: extracts relevant transfer records from raw dumps.
 - `to_parquet.py`: converts extracted datasets into parquet format for analysis.
 
-### The State of the Art of Address Poisoning Attacks in EVM-Compatible Blockchains
+### Detection of Blockchain Address Poisoning Attacks in Layer Two Networks
 The repository was used to obtain the results in the article: <br> 
-`The State of the Art of Address Poisoning Attacks in EVM-Compatible Blockchains` <br>
+`Detection of Blockchain Address Poisoning Attacks in Layer Two Networks` <br>
 Also steps were profoundly explained in a theoretical way in this article. <br>
 File `Poisoning-Results-Final.rar` contains results discussed in the article.

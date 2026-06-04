@@ -191,10 +191,8 @@ def dedupe_csv(path_in: str, path_out: str | None = None):
         print(f"missing {path_in}")
 
 def calc_score(x):
-    if x == 3:
-        return 1
     b = 1.5
-    c = 2
+    c = 2.07
     return math.floor(math.log(x + c, b)) - 3  #based on how hard it is to find longer similar addresses
 
 def extract_txhash_from_key(key):
@@ -659,8 +657,8 @@ def analyse_results(name, rpc1, rpc2,ERC20_decimals_map,ERC20_price_map,ERC20_sy
                         continue
 
                     if reversed == True and unique_accounts_attacker > 100:
-                        cached_attackers_removed.add(attacker)
-                        removed_attackers_rows.append([key, attacker, score])
+                        #cached_attackers_removed.add(attacker)
+                        #removed_attackers_rows.append([key, attacker, score])
                         continue
 
                     contract_attacker_bool = None
